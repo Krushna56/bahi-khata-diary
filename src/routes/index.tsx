@@ -127,6 +127,14 @@ function Khata({ email }: { email: string }) {
               if (id) document.getElementById("ledger")?.scrollIntoView({ behavior: "smooth" });
             }}
           />
+        </div>
+
+        <aside className="space-y-6">
+          <ExpenseForm categories={categories} />
+          <Udhaar />
+        </aside>
+
+        <div className="lg:col-span-2">
           <LedgerTable
             expenses={expenses}
             categories={categories}
@@ -135,12 +143,8 @@ function Khata({ email }: { email: string }) {
             onClearCategory={() => setCatFilter(null)}
           />
         </div>
-
-        <aside className="space-y-6">
-          <ExpenseForm categories={categories} />
-          <Udhaar />
-        </aside>
       </main>
+
     </div>
   );
 }
