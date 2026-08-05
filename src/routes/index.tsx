@@ -42,6 +42,7 @@ function Index() {
 
 function Khata({ email }: { email: string }) {
   const [month, setMonth] = useState(() => monthKey(new Date()));
+  const [catFilter, setCatFilter] = useState<string | null>(null);
   const { data: categories = [] } = useCategories();
   const { data: expenses = [] } = useExpenses();
 
