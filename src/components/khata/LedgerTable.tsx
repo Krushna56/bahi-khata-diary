@@ -6,10 +6,14 @@ export function LedgerTable({
   expenses,
   categories,
   month,
+  categoryId,
+  onClearCategory,
 }: {
   expenses: Expense[];
   categories: Category[];
   month: string;
+  categoryId?: string | null;
+  onClearCategory?: () => void;
 }) {
   const [scope, setScope] = useState<"month" | "all">("month");
   const [q, setQ] = useState("");
@@ -23,6 +27,7 @@ export function LedgerTable({
     const { start, end } = monthRange(month);
     const term = q.trim().toLowerCase();
     return expenses.filter((e) => {
+      if (categoryId && e.category_id !== categoryId) return false;
       if (scope === "month" && (e.spent_on < start || e.spent_on > end)) return false;
       if (!term) return true;
       const cat = (e.category_id && names[e.category_id]) || "";
@@ -30,12 +35,12 @@ export function LedgerTable({
         e.description.toLowerCase().includes(term) || cat.toLowerCase().includes(term)
       );
     });
-  }, [expenses, scope, q, month, names]);
+  }, [expenses, scope, q, month, names, categoryId]);
 
   const total = rows.reduce((s, e) => s + e.amount, 0);
 
   return (
-    <section className="paper p-4">
+    <section id="ledger" className="paper p-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 className="text-lg font-semibold">Ledger</h2>
         <div className="flex gap-2">
@@ -57,6 +62,22 @@ export function LedgerTable({
           ))}
         </div>
       </div>
+
+      {categoryId && (
+        <div className="mt-3 flex items-center gap-2 border border-brass/40 bg-brass/10 px-3 py-1.5 text-xs">
+          <span>
+            Showing only <strong>{names[categoryId] ?? "category"}</strong>
+          </span>
+          <button
+            type="button"
+            onClick={onClearCategory}
+            className="ml-auto underline underline-offset-2"
+          >
+            Clear filter
+          </button>
+        </div>
+      )}
+
 
       <label htmlFor="search" className="sr-only">
         Search entries
