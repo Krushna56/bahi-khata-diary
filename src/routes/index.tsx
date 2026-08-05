@@ -117,8 +117,22 @@ function Khata({ email }: { email: string }) {
             ))}
           </section>
 
-          <BudgetStamps categories={categories} spentByCat={spentByCat} />
-          <LedgerTable expenses={expenses} categories={categories} month={month} />
+          <BudgetStamps
+            categories={categories}
+            spentByCat={spentByCat}
+            selectedId={catFilter}
+            onSelect={(id) => {
+              setCatFilter(id);
+              if (id) document.getElementById("ledger")?.scrollIntoView({ behavior: "smooth" });
+            }}
+          />
+          <LedgerTable
+            expenses={expenses}
+            categories={categories}
+            month={month}
+            categoryId={catFilter}
+            onClearCategory={() => setCatFilter(null)}
+          />
         </div>
 
         <aside className="space-y-6">
