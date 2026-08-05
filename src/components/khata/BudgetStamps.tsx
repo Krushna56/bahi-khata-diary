@@ -5,9 +5,13 @@ import { useDeleteCategory, useSaveCategory, type Category } from "@/hooks/useKh
 export function BudgetStamps({
   categories,
   spentByCat,
+  selectedId,
+  onSelect,
 }: {
   categories: Category[];
   spentByCat: Record<string, number>;
+  selectedId?: string | null;
+  onSelect?: (id: string | null) => void;
 }) {
   const [editing, setEditing] = useState(false);
   const save = useSaveCategory();
