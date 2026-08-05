@@ -36,12 +36,13 @@ export function BudgetStamps({
           <p className="mt-1 text-xs text-muted-foreground">
             Kisi bhi stamp par click karein uske sare expenses dekhne ke liye.
           </p>
-          <div className="mt-4 flex flex-wrap gap-5">
+          <div className="mt-4 flex flex-wrap gap-x-5 gap-y-6">
             {categories.map((c) => {
               const spent = spentByCat[c.id] ?? 0;
               const pct = c.monthly_budget > 0 ? Math.round((spent / c.monthly_budget) * 100) : 0;
               const over = c.monthly_budget > 0 && spent > c.monthly_budget;
               const active = selectedId === c.id;
+              const fill = Math.min(pct, 100) * 3.6;
               return (
                 <div key={c.id} className="w-[6.5rem]">
                   <button
@@ -50,8 +51,8 @@ export function BudgetStamps({
                     aria-label={`Show ${c.name} expenses`}
                     onClick={() => onSelect?.(active ? null : c.id)}
                     className={
-                      "block w-full transition-transform hover:scale-105 " +
-                      (active ? "scale-105" : "")
+                      "block w-full transition-transform duration-200 hover:scale-[1.06] " +
+                      (active ? "scale-[1.06]" : "")
                     }
                   >
                     <div
@@ -60,12 +61,20 @@ export function BudgetStamps({
                         (over ? "text-ink-red" : "text-brass") +
                         (active ? " ring-2 ring-brass ring-offset-2 ring-offset-card" : "")
                       }
+                      style={{
+                        backgroundImage: `conic-gradient(currentColor 0deg ${fill}deg, transparent ${fill}deg 360deg)`,
+                      }}
                     >
-                      <span className="num text-lg font-bold leading-none">
-                        {c.monthly_budget > 0 ? `${pct}%` : "—"}
-                      </span>
-                      <span className="mt-1 max-w-[4.5rem] truncate text-[10px] font-semibold uppercase tracking-wide">
-                        {c.name}
+                      <span
+                        className="flex h-[4.6rem] w-[4.6rem] flex-col items-center justify-center rounded-full bg-card"
+                        style={{ boxShadow: "inset 0 0 0 1px currentColor" }}
+                      >
+                        <span className="num text-lg font-bold leading-none">
+                          {c.monthly_budget > 0 ? `${pct}%` : "—"}
+                        </span>
+                        <span className="mt-1 max-w-[4rem] truncate text-[10px] font-semibold uppercase tracking-wide">
+                          {c.name}
+                        </span>
                       </span>
                     </div>
                   </button>
@@ -76,6 +85,7 @@ export function BudgetStamps({
               );
             })}
           </div>
+
         </>
       )}
 
