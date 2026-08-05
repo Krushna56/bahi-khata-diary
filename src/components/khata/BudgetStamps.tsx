@@ -32,29 +32,53 @@ export function BudgetStamps({
       </div>
 
       {!editing && (
-        <div className="mt-4 flex flex-wrap gap-5">
-          {categories.map((c) => {
-            const spent = spentByCat[c.id] ?? 0;
-            const pct = c.monthly_budget > 0 ? Math.round((spent / c.monthly_budget) * 100) : 0;
-            const over = c.monthly_budget > 0 && spent > c.monthly_budget;
-            return (
-              <div key={c.id} className="w-[6.5rem]">
-                <div className={"stamp " + (over ? "text-ink-red" : "text-brass")}>
-                  <span className="num text-lg font-bold leading-none">
-                    {c.monthly_budget > 0 ? `${pct}%` : "—"}
-                  </span>
-                  <span className="mt-1 max-w-[4.5rem] truncate text-[10px] font-semibold uppercase tracking-wide">
-                    {c.name}
-                  </span>
+        <>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Kisi bhi stamp par click karein uske sare expenses dekhne ke liye.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-5">
+            {categories.map((c) => {
+              const spent = spentByCat[c.id] ?? 0;
+              const pct = c.monthly_budget > 0 ? Math.round((spent / c.monthly_budget) * 100) : 0;
+              const over = c.monthly_budget > 0 && spent > c.monthly_budget;
+              const active = selectedId === c.id;
+              return (
+                <div key={c.id} className="w-[6.5rem]">
+                  <button
+                    type="button"
+                    aria-pressed={active}
+                    aria-label={`Show ${c.name} expenses`}
+                    onClick={() => onSelect?.(active ? null : c.id)}
+                    className={
+                      "block w-full transition-transform hover:scale-105 " +
+                      (active ? "scale-105" : "")
+                    }
+                  >
+                    <div
+                      className={
+                        "stamp " +
+                        (over ? "text-ink-red" : "text-brass") +
+                        (active ? " ring-2 ring-brass ring-offset-2 ring-offset-card" : "")
+                      }
+                    >
+                      <span className="num text-lg font-bold leading-none">
+                        {c.monthly_budget > 0 ? `${pct}%` : "—"}
+                      </span>
+                      <span className="mt-1 max-w-[4.5rem] truncate text-[10px] font-semibold uppercase tracking-wide">
+                        {c.name}
+                      </span>
+                    </div>
+                  </button>
+                  <p className="num mt-2 text-center text-[11px] text-muted-foreground">
+                    {inr(spent)} / {inr(c.monthly_budget)}
+                  </p>
                 </div>
-                <p className="num mt-2 text-center text-[11px] text-muted-foreground">
-                  {inr(spent)} / {inr(c.monthly_budget)}
-                </p>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        </>
       )}
+
 
       {editing && (
         <div className="mt-4 space-y-2">
