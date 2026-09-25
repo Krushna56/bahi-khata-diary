@@ -37,12 +37,12 @@ export function BudgetStamps({
             Kisi bhi stamp par click karein uske sare expenses dekhne ke liye.
           </p>
           <div className="mt-4 flex flex-wrap gap-x-5 gap-y-6">
-            {categories.map((c) => {
+            {categories.map((c, i) => {
               const spent = spentByCat[c.id] ?? 0;
               const pct = c.monthly_budget > 0 ? Math.round((spent / c.monthly_budget) * 100) : 0;
               const over = c.monthly_budget > 0 && spent > c.monthly_budget;
               const active = selectedId === c.id;
-              const fill = Math.min(pct, 100) * 3.6;
+              const fill = Math.min(pct, 100);
               return (
                 <div key={c.id} className="w-[6.5rem]">
                   <button
@@ -57,14 +57,33 @@ export function BudgetStamps({
                   >
                     <div
                       className={
-                        "stamp " +
+                        "stamp relative stamp-pop " +
                         (over ? "text-ink-red" : "text-brass") +
                         (active ? " ring-2 ring-brass ring-offset-2 ring-offset-card" : "")
                       }
-                      style={{
-                        backgroundImage: `conic-gradient(currentColor 0deg ${fill}deg, transparent ${fill}deg 360deg)`,
-                      }}
+                      style={{ animationDelay: `${i * 70}ms` }}
                     >
+                      <svg
+                        viewBox="0 0 104 104"
+                        aria-hidden="true"
+                        className="pointer-events-none absolute inset-0 h-full w-full -rotate-90"
+                      >
+                        <circle
+                          cx="52"
+                          cy="52"
+                          r="43"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="12"
+                          pathLength={100}
+                          strokeLinecap={fill > 1 ? "round" : "butt"}
+                          className="stamp-sweep"
+                          style={{
+                            strokeDasharray: `${fill} ${100 - fill}`,
+                            animationDelay: `${i * 70 + 120}ms`,
+                          }}
+                        />
+                      </svg>
                       <span
                         className="flex h-[4.6rem] w-[4.6rem] flex-col items-center justify-center rounded-full bg-card"
                         style={{ boxShadow: "inset 0 0 0 1px currentColor" }}
