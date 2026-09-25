@@ -120,6 +120,35 @@
   opacity: 0.92;
 }
 
+/* Stamp entrance: each stamp pops in and its progress ring sweeps into place */
+@keyframes stamp-pop {
+  from {
+    opacity: 0;
+    transform: rotate(-6deg) scale(0.72);
+  }
+}
+
+@keyframes stamp-sweep {
+  from {
+    stroke-dasharray: 0 100;
+  }
+}
+
+.stamp-pop {
+  animation: stamp-pop 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+}
+
+.stamp-sweep {
+  animation: stamp-sweep 1s cubic-bezier(0.33, 1, 0.68, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stamp-pop,
+  .stamp-sweep {
+    animation: none;
+  }
+}
+
 @utility num {
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
